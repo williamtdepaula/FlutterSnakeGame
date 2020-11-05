@@ -21,4 +21,9 @@ Now run the app on your connected device (using terminal):
 ```
 $ flutter run
 ```
+
+## 🤓 Author(s)
+
+# William Tristão de Paula # [Profile](https://github.com/williamtdepaula "GitHub Profile")
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
