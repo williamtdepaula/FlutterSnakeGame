@@ -29,10 +29,10 @@ class GameBloc extends SimpleStream {
   }
 
   void _configGame() {
-    this.pixels = new Pixels(totalPixels: 560, totalColumns: 20);
+    this.pixels = new Pixels(totalPixels: 740, totalColumns: 20);
     this.snake = new Snake(
       position: 1,
-      initialSize: 10,
+      initialSize: 3,
       direction: SnakeDirection.right,
       colorHead: Color(0xFFE0E0E0),
       colorBody: Colors.white,
@@ -122,7 +122,7 @@ class GameBloc extends SimpleStream {
     snake.position = this._getNextPosition();
 
     //Verifica se o jogador não bateu no próprio corpo
-    if (!snake.isBody(snake.position, teste: 'a')) {
+    if (!snake.isBody(snake.position)) {
       //Verifica se está passando por um ponto
       if (points.isPoint(snake.position)) {
         snake.addBody();

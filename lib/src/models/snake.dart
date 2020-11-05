@@ -55,7 +55,7 @@ class Snake {
     }
   }
 
-  bool isBody(int index, {String teste = ''}) {
+  bool isBody(int index) {
     return this.body.indexOf(index) != -1;
   }
 

@@ -27,7 +27,7 @@ class TimerGame {
 
   void _initTimerCreatPoint() {
     this._timerCreatePoint = Timer.periodic(
-      Duration(seconds: 15),
+      Duration(seconds: 5),
       (_) => onTimerCreatePoint(),
     );
   }
