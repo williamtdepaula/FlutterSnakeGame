@@ -1,16 +1,22 @@
 # snake_game
 
-A new Flutter project.
+Did you like it? Then star this repo ⭐  
 
-## Getting Started
+## About
 
-This project is a starting point for a Flutter application.
+This is a Snake Game developed in Flutter, using object oriented programing, BLOC and Streams 😁
 
-A few resources to get you started if this is your first Flutter project:
+## The Game
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![](mock.gif)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Configuration Steps
+
+Cloning the repository:
+$ git clone https://github.com/williamtdepaula/FlutterSnakeGame.git
+
+Open the project:
+$ cd FlutterSnakeGame
+
+Now run the app on your connected device (using terminal):
+$ flutter run
