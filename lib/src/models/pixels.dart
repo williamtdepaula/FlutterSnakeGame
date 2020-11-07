@@ -8,25 +8,29 @@ enum PixelsNextPosition {
 }
 
 class Pixels {
+  BuildContext context;
   int totalPixels = 500;
   int totalColumns = 20;
   int _totalOfRows = 0;
   List<int> totalItemsByRow = [];
 
   Pixels({
+    @required this.context,
     this.totalPixels,
     this.totalColumns,
   }) {
-    this.calcTotalOfRows();
+    this._calcTotalOfRows();
     this._generateListTotalItemsByRow();
   }
 
   void _generateListTotalItemsByRow() {
-    totalItemsByRow = List.generate(int.parse((this._totalOfRows).toString()),
-        (index) => (index + 1) * this.totalColumns);
+    totalItemsByRow = List.generate(
+      int.parse((this._totalOfRows).toString()),
+      (index) => (index + 1) * this.totalColumns - 1,
+    );
   }
 
-  void calcTotalOfRows() {
+  void _calcTotalOfRows() {
     this._totalOfRows = (this.totalPixels / this.totalColumns).round();
   }
 
@@ -40,10 +44,8 @@ class Pixels {
     this.totalItemsByRow.asMap().forEach((index, totalItemsInRow) {
       if (index == 0) {
         if (position <= totalItemsInRow) row = index;
-      } else {
-        if (position <= totalItemsInRow &&
-            position > this.totalItemsByRow[index - 1]) row = index;
-      }
+      } else if (position <= totalItemsInRow &&
+          position > this.totalItemsByRow[index - 1]) row = index;
     });
 
     return row;
@@ -52,53 +54,49 @@ class Pixels {
   int getNextPixel(int currentPosition, PixelsNextPosition nextPosition) {
     int indexRowOfCurrentPosition = this.getPixelRow(currentPosition);
 
-    if (nextPosition == PixelsNextPosition.nextRightPosition) {
-      //Está no último pixel da linha
-      if (currentPosition ==
-          (this.totalItemsByRow[indexRowOfCurrentPosition] - 1)) {
-        return this.totalItemsByRow[indexRowOfCurrentPosition] -
-            this.totalColumns;
-      } else {
-        return currentPosition + 1;
-      }
-    }
-
-    if (nextPosition == PixelsNextPosition.nextLeftPosition) {
-      //Está no primeiro pixel
-
-      if (currentPosition ==
-          this.totalItemsByRow[indexRowOfCurrentPosition + 1] -
-              (this.totalColumns)) {
-        return this.totalItemsByRow[indexRowOfCurrentPosition + 1] - 1;
-      }
-
-      return currentPosition - 1;
-    }
-
+    //************************ ESTÁ INDO PARA CIMA ******************************/
     if (nextPosition == PixelsNextPosition.nextTopPosition) {
       //Está na primeira linha
       if (indexRowOfCurrentPosition == 0) {
-        //vai para a última linha
-        int nextPosition =
-            this.totalItemsByRow[this.totalItemsByRow.length - 1] -
-                (this.totalColumns - currentPosition);
-
-        return nextPosition;
+        return currentPosition + (this.totalPixels - this.totalColumns);
       }
 
       return currentPosition - this.totalColumns;
     }
 
+    //************************ ESTÁ INDO PARA BAIXO ******************************/
     if (nextPosition == PixelsNextPosition.nextBottomPosition) {
       //Está na última linha
-      if (indexRowOfCurrentPosition == (this._totalOfRows - 1)) {
+      if (indexRowOfCurrentPosition == this.totalItemsByRow.length - 1) {
         //vai para a primeira linha
-        int nextPosition =
-            this.totalColumns - (this.totalPixels - currentPosition);
-
-        return nextPosition;
+        return this.totalColumns - (this.totalPixels - currentPosition);
       }
       return currentPosition + this.totalColumns;
+    }
+
+    //************************ ESTÁ INDO PARA DIREITA ******************************/
+    if (nextPosition == PixelsNextPosition.nextRightPosition) {
+      //Está no último pixel da linha
+      if (currentPosition ==
+          (this.totalItemsByRow[indexRowOfCurrentPosition])) {
+        return this.totalItemsByRow[indexRowOfCurrentPosition] -
+            (this.totalColumns - 1);
+      } else {
+        return currentPosition + 1;
+      }
+    }
+
+    //************************ ESTÁ INDO PARA ESQUERDA ******************************/
+    if (nextPosition == PixelsNextPosition.nextLeftPosition) {
+      //Está no primeiro pixel
+
+      if (currentPosition ==
+          this.totalItemsByRow[indexRowOfCurrentPosition] -
+              (this.totalColumns - 1)) {
+        return this.totalItemsByRow[indexRowOfCurrentPosition];
+      }
+
+      return currentPosition - 1;
     }
 
     return currentPosition;

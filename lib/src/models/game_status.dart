@@ -1,13 +1,13 @@
-import 'package:snake_game/src/models/points.dart';
+import 'package:snake_game/src/models/foods.dart';
 import 'package:snake_game/src/models/snake.dart';
 
-class Game {
+class GameStatus {
   Snake snake;
-  Points points;
+  Foods foods;
   bool gamePlaying;
 
-  Game({
-    this.points,
+  GameStatus({
+    this.foods,
     this.snake,
     this.gamePlaying = true,
   });

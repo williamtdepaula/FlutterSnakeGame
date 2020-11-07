@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snake_game/src/bloc/game.bloc.dart';
-import 'package:snake_game/src/models/game.dart';
-import 'package:snake_game/src/models/points.dart';
+import 'package:snake_game/src/models/foods.dart';
+import 'package:snake_game/src/models/game_status.dart';
 import 'package:snake_game/src/models/snake.dart';
 import 'package:snake_game/src/widgets/buttons/button.dart';
 import 'package:snake_game/src/widgets/buttons/button_pause.dart';
@@ -49,11 +49,11 @@ class _GameScreenState extends State<GameScreen> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) return Container();
 
-        Game game = snapshot.data;
+        GameStatus game = snapshot.data;
 
         Snake snake = game.snake;
 
-        Points points = game.points;
+        Foods foods = game.foods;
 
         return Column(
           children: [
@@ -67,60 +67,61 @@ class _GameScreenState extends State<GameScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return PixelArea(
                     snake: snake,
-                    points: points,
+                    foods: foods,
                     position: index,
                   );
                 },
               ),
             ),
             Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      'Created By William Tristão de Paula',
-                      style: TextStyle(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    'Created By William Tristão de Paula',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          ButtonPause(
+                            paused: !game.gamePlaying,
+                            onPressed: game.gamePlaying
+                                ? gameBloc.pauseGame
+                                : gameBloc.unPauseGame,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Button(
+                            text: 'Reiniciar',
+                            onPressed: gameBloc.restartGame,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Pontos: ${snake.totalPoints}',
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
-                          fontSize: 14),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            ButtonPause(
-                              paused: !game.gamePlaying,
-                              onPressed: game.gamePlaying
-                                  ? gameBloc.pauseGame
-                                  : gameBloc.unPauseGame,
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Button(
-                              text: 'Reiniciar',
-                              onPressed: gameBloc.restartGame,
-                            ),
-                          ],
+                          fontSize: 16,
                         ),
-                        Text(
-                          'Pontos: ${snake.totalPoints}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+            ),
           ],
         );
       },

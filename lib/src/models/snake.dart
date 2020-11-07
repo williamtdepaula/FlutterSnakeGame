@@ -24,16 +24,26 @@ class Snake {
   }) {
     //Evita que o tamanho inicial da snake seja maior do que o espaço que ela tem para iniciar
     if ((position + 1) < this.initialSize) position = this.initialSize;
-    this.addBody(size: this.initialSize); //Adiciona a cabeça ao corpo
+    this._addBody(size: this.initialSize); //Adiciona a cabeça ao corpo
   }
 
-  int get totalPoints => this.body.length > this.initialSize ? this.body.length - this.initialSize : 0;
+  int get totalPoints => this.body.length > this.initialSize
+      ? this.body.length - this.initialSize
+      : 0;
 
   void die() {
     this.body.clear();
   }
 
-  void addBody({int size = 1}) {
+  void eatFood() {
+    this._addBody();
+  }
+
+  void eatSeveralFoods(int amount) {
+    this._addBody(size: amount);
+  }
+
+  void _addBody({int size = 1}) {
     for (int i = 0; i < size; i++) {
       this.body.add(position - i);
     }

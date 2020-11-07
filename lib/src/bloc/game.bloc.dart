@@ -1,19 +1,18 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:snake_game/src/models/game.dart';
+import 'package:snake_game/src/models/game_status.dart';
 import 'package:snake_game/src/models/pixels.dart';
-import 'package:snake_game/src/models/points.dart';
+import 'package:snake_game/src/models/foods.dart';
 import 'package:snake_game/src/models/snake.dart';
-import 'package:snake_game/src/models/timerGame.dart';
+import 'package:snake_game/src/models/timer_game.dart';
 import 'package:snake_game/src/utils/simple_stream.dart';
 import 'package:snake_game/src/widgets/modals/modal_end_game.dart';
 
 class GameBloc extends SimpleStream {
   Pixels pixels;
   Snake snake;
-  Points points;
+  Foods foods;
   TimerGame _timerGame;
   BuildContext context;
 
@@ -29,15 +28,15 @@ class GameBloc extends SimpleStream {
   }
 
   void _configGame() {
-    this.pixels = new Pixels(totalPixels: 740, totalColumns: 20);
+    this.pixels = new Pixels(context: context, totalPixels: 500, totalColumns: 20);
     this.snake = new Snake(
-      position: 1,
+      position: 2,
       initialSize: 3,
       direction: SnakeDirection.right,
-      colorHead: Color(0xFFE0E0E0),
+      colorHead: Colors.white,
       colorBody: Colors.white,
     );
-    this.points = new Points(color: Colors.green);
+    this.foods = new Foods(color: Colors.green);
   }
 
   void startGame() {
@@ -45,7 +44,7 @@ class GameBloc extends SimpleStream {
 
     _timerGame = new TimerGame(
       onTimerCreatePoint: () =>
-          points.generatePoints(pixels.totalPixels, Random().nextInt(5)),
+          foods.generateFoods(pixels.totalPixels, Random().nextInt(5)),
       onTimerSnakeMove: () => _onSnakeMove(),
     );
 
@@ -72,7 +71,7 @@ class GameBloc extends SimpleStream {
     );
 
     this._timerGame.stopTimers();
-    points.clear();
+    foods.clear();
 
     snake.die();
 
@@ -124,15 +123,15 @@ class GameBloc extends SimpleStream {
     //Verifica se o jogador não bateu no próprio corpo
     if (!snake.isBody(snake.position)) {
       //Verifica se está passando por um ponto
-      if (points.isPoint(snake.position)) {
-        snake.addBody();
-        points.removePoint(snake.position);
+      if (foods.isFood(snake.position)) {
+        snake.eatFood();
+        foods.removeFood(snake.position);
         this._timerGame.decreaseTimerMoveSnake();
       }
 
       snake.moveBody();
 
-      add(Game(points: this.points, snake: this.snake));
+      add(GameStatus(foods: this.foods, snake: this.snake));
     } else {
       this.onEndGame();
     }
@@ -171,9 +170,9 @@ class GameBloc extends SimpleStream {
   }
 
   void _sendToViewAppStatus() {
-    add(Game(
+    add(GameStatus(
       snake: this.snake,
-      points: this.points,
+      foods: this.foods,
       gamePlaying: this.gameIsPlaying,
     ));
   }
