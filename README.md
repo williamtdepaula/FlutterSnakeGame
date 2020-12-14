@@ -1,5 +1,5 @@
 # FlutterSnakeGame
-⭐ This is a Snake Game developed in Flutter, using object oriented programing, BLOC and Streams ⭐ 
+⭐ This is a Snake Game developed in Flutter, using object oriented programing, BLOC and Streams⭐ 
 
 ## The Game
 
